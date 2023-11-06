@@ -64,10 +64,22 @@ def dishes():
 
 @app.route("/dish/<int:dish_id>", methods=['GET', 'PUT', 'PATCH', 'DELETE'])
 def paramDishes(dish_id):
-    dish = Dishes.query.get(int(dish_id))
+    # dish = Dishes.query.filter_by(id=1).first()
+    # dish = Dishes.query.get(1)
+    # dish = db.session.get(Dishes, 1)
+    dish = db.session.execute(db.select(Dishes).filter_by(id=1)).scalar()
+    print(dish)
     if(dish):
         if(request.method == 'GET'):
-            return jsonify({'message': f'Single Dish', 'Dish': dish})
+            dish_dict = {
+                'id': dish.id,
+                'name': dish.name,
+                'price': dish.price,
+                'availability': dish.availability,
+                'store': dish.store
+            }
+
+            return jsonify({'message': 'Single Dish', 'Dish': dish_dict})
         
         if(request.method == 'DELETE'):
             db.session.delete(dish)
@@ -87,6 +99,8 @@ def paramDishes(dish_id):
         return jsonify({'message': f'Dish with ID {dish_id} has been updated'})
     else:
         return jsonify({'message': 'Dish not found'}) 
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

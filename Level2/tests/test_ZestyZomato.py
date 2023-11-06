@@ -15,6 +15,7 @@ def test_welcome(client):
 def test_getDishes(client):
     response = client.get('/dishes')
     data = json.loads(response.data)
+    print('all', data)
     assert 'All Dishes' == data['message']
 
 def test_Dishes_edge_case(client):
@@ -30,7 +31,7 @@ def test_Dishes_edge_case(client):
     single = json.loads(Single_Dish.data)
     assert 'Dish not found' == single['message']
 
-def test_getDish(client):
+def test_get_single_dish(client):
     response = client.get('/dish/1')
     data = json.loads(response.data)
     assert 'Single Dish' == data['message']
